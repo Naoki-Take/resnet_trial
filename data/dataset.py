@@ -3,11 +3,11 @@ import torchvision.transforms as T
 from torch.utils.data import Dataset, DataLoader
 
 transform = T.Compose([T.ToTensor()])
-traindata = torchvision.datasets.MNIST(root='./data', train=True,download=True,transform=transform)
+traindata = datasets.MNIST(root='./data', train=True,download=True,transform=transform)
 trainloader = DataLoader(traindata,batch_size = 64)
 
-def get_loader(args.dataset):
-    if args.dataset == "mnist":
+def get_loader(args_dataset):
+    if args_dataset == "mnist":
         train_dataloader = DataLoader(
             datasets.MNIST(root='./data', train=True, download=True, transform=transform),
             batch_size = 64,
@@ -18,7 +18,7 @@ def get_loader(args.dataset):
             batch_size = 64,
             shuffle=False
             )
-    if args.dataset == "cifar10":
+    if args_dataset == "cifar10":
         train_dataloader = DataLoader(
             datasets.CIFAR10(root='./data', train=True, download=True, transform=transform),
             batch_size = 64,

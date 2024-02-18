@@ -23,7 +23,7 @@ model.fc = torch.nn.Linear(in_features, 2)
 # VITに変更できます
 # model = timm.create_model('vit_base_patch16_224', pretrained=True, num_classes=2).to("cuda")
 
-optimizer = torch.optim.SGD(model.parameters(), lr=LR, momentum=0.9)
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
 loss_fn = torch.nn.CrossEntropyLoss()
 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 epoch_number = 3
@@ -77,7 +77,7 @@ def validate_one_epoch(val_dataloader, model, loss_fn):
     label_total = defaultdict(int)
 
     with torch.no_grad():
-        for i, data in enumerate(tqdm(train_dataloader)):
+        for i, data in enumerate(tqdm(val_dataloader)):
             inputs, labels = data
             inputs, labels = inputs.to("cuda"), labels.to("cuda")
 
@@ -103,21 +103,3 @@ def validate_one_epoch(val_dataloader, model, loss_fn):
 
 EPOCH = 3  # 仮のエポック数
 epoch_number = 0
-
-for epoch in range(EPOCH):
-    print(f"EPOCH {epoch+1}:")
-
-    avg_loss, train_total_accuracy, train_label_accuracy = train_one_epoch(
-        train_dataloader, model, loss_fn, optimizer)
-    print(f"Train Loss: {avg_loss}, Train Total Accuracy: {
-          train_total_accuracy}, Train Label Accuracy: {train_label_accuracy}")
-    # wandb.log({"train_loss": avg_loss, "train_total_accuracy": train_total_accuracy, **{f"train_acc_label_{label}": acc for label, acc in train_label_accuracy.items()}})
-
-    val_loss, val_total_accuracy, val_label_accuracy = validate_one_epoch(
-        val_dataloader, model, loss_fn)
-    print(f"Validation Loss: {val_loss}, Validation Total Accuracy: {
-          val_total_accuracy}, Validation Label Accuracy: {val_label_accuracy}")
-    # wandb.log({"val_loss": val_loss, "val_total_accuracy": val_total_accuracy, **{f"val_acc_label_{label}": acc for label, acc in val_label_accuracy.items()}})
-
-    # モデルの保存とエポック数の更新は、状況に応じて適宜行う
-    epoch_number += 1
