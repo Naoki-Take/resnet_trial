@@ -36,14 +36,14 @@ def main():
 
         avg_loss, train_total_accuracy, train_label_accuracy = train_one_epoch(
             train_dataloader, model, loss_fn, optimizer)
-        print(f"""Train Loss: {avg_loss}, Train Total Accuracy:
-              {train_total_accuracy}, Train Label Accuracy: {train_label_accuracy}""")
+        print(f"Train Loss: {avg_loss}, Train Total Accuracy: \
+              {train_total_accuracy}, Train Label Accuracy: {train_label_accuracy}")
         # wandb.log({"train_loss": avg_loss, "train_total_accuracy": train_total_accuracy, **{f"train_acc_label_{label}": acc for label, acc in train_label_accuracy.items()}})
 
         val_loss, val_total_accuracy, val_label_accuracy = validate_one_epoch(
             val_dataloader, model, loss_fn)
-        print(f"""Validation Loss: {val_loss}, Validation Total Accuracy:
-              {val_total_accuracy}, Validation Label Accuracy: {val_label_accuracy}""")
+        print(f"Validation Loss: {val_loss}, Validation Total Accuracy: \
+              {val_total_accuracy}, Validation Label Accuracy: {val_label_accuracy}")
         # wandb.log({"val_loss": val_loss, "val_total_accuracy": val_total_accuracy, **{f"val_acc_label_{label}": acc for label, acc in val_label_accuracy.items()}})
 
 
