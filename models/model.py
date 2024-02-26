@@ -9,6 +9,16 @@ def get_model(args_model, args_num_classes):
             'resnet50', pretrained=True, num_classes=args_num_classes)
         in_features = model.fc.in_features
         model.fc = nn.Linear(in_features, args_num_classes)
+    elif args_model == "vit":
+        model = timm.create_model('vit_base_patch16_224', pretrained=True, args_num_classes)
+        params_to_update = []
+        update_param_names = ['head.weight', 'head.bias']
+        for name, param in model.named_parameters():
+            if name in update_param_names:
+                param.requires_grad = True
+                params_to_update.append(param)
+            else:
+                param.requires_grad = False
     else:
         raise NotImplementedError
     return model
