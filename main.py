@@ -13,18 +13,20 @@ parser.add_argument('--num_classes', type=int,
                     default=10, help='number of classes')
 parser.add_argument('--num_epochs', type=int,
                     default=3, help='number of epochs')
-parser.add_argument('--optimizer', type=str, default="sgd", help='optimizer')
+parser.add_argument('--optimizer', type=str, default="adam", help='optimizer')
 parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
 parser.add_argument('--dataset', type=str, default='mnist', help='dataset')
+parser.add_argument('--use_gpu', type=bool, default=True, help='use_gpu')
 args = parser.parse_args()
 
 
 def main():
-    print(f"Use GPU: {torch.cuda.is_available()}")
+    print(f"GPU availability: {torch.cuda.is_available()}")
     model = get_model(args.model, args.num_classes)
-    model.to("cuda")
-    # optimizer = get_optim(args.model, args.num_classes, args.optimizer, args.lr)
-    optimizer = torch.optim.Adam(model.parameters())
+    if args.use_gpu:
+        model.to("cuda")
+    optimizer = get_optim(args.model, args.num_classes, args.optimizer, args.lr)
+    # optimizer = torch.optim.Adam(model.parameters())
     loss_fn = nn.CrossEntropyLoss()
     train_dataloader, val_dataloader = get_loader(args.dataset)
     # timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
