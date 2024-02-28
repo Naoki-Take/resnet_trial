@@ -42,7 +42,7 @@ def train_one_epoch(train_dataloader, model, loss_fn, optimizer):
     label_total = defaultdict(int)
 
     for data in tqdm(train_dataloader):
-        inputs, labels = data[0].to("cuda"), data[1].to("cuda")
+        inputs, labels = data[0].to("cuda"), data[1].view(-1).to("cuda")
         optimizer.zero_grad()
         outputs = model(inputs)
         loss = loss_fn(outputs, labels)
@@ -79,7 +79,7 @@ def validate_one_epoch(val_dataloader, model, loss_fn):
     with torch.no_grad():
         for i, data in enumerate(tqdm(val_dataloader)):
             inputs, labels = data
-            inputs, labels = inputs.to("cuda"), labels.to("cuda")
+            inputs, labels = inputs.to("cuda"), labels.view(-1).to("cuda")
 
             outputs = model(inputs)
             loss = loss_fn(outputs, labels)
